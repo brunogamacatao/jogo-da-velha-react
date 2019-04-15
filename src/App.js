@@ -1,28 +1,77 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pecaDaVez: '❌',
+      valores: [['','',''], ['','',''], ['','','']]
+    };
+  }
+
+  joga = (x, y) => {
+    let valores = this.state.valores.slice();
+    valores[x][y] = this.state.pecaDaVez;
+    this.setState({
+      valores: valores,
+      pecaDaVez: (this.state.pecaDaVez === '❌' ? '⭕' : '❌')
+    });
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <>
+        <h1>Jogo da Velha</h1>
+        <Tabuleiro valores={this.state.valores} onJoga={this.joga}/>
+        <br/>
+        <h3>É a vez de {this.state.pecaDaVez}</h3>
+      </>
+    );
+  }
+}
+
+class Tabuleiro extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <>
+        <div className="linha">
+          <Casa valores={this.props.valores} x={0} y={0} onJoga={this.props.onJoga}/>
+          <Casa valores={this.props.valores} x={0} y={1} onJoga={this.props.onJoga}/>
+          <Casa valores={this.props.valores} x={0} y={2} onJoga={this.props.onJoga}/>
+        </div>
+        <div className="linha">
+          <Casa valores={this.props.valores} x={1} y={0} onJoga={this.props.onJoga}/>
+          <Casa valores={this.props.valores} x={1} y={1} onJoga={this.props.onJoga}/>
+          <Casa valores={this.props.valores} x={1} y={2} onJoga={this.props.onJoga}/>
+        </div>
+        <div className="linha">
+          <Casa valores={this.props.valores} x={2} y={0} onJoga={this.props.onJoga}/>
+          <Casa valores={this.props.valores} x={2} y={1} onJoga={this.props.onJoga}/>
+          <Casa valores={this.props.valores} x={2} y={2} onJoga={this.props.onJoga}/>
+      </div>
+      </>
+    );
+  }
+}
+
+class Casa extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="casa" onClick={() => this.props.onJoga(this.props.x, this.props.y)}>
+        {this.props.valores[this.props.x][this.props.y] || "\u00A0"}
       </div>
     );
   }
 }
+
 
 export default App;
